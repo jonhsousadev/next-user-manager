@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt'; 
+import { User } from './entities/user.entity';
 
 describe('UserService', () => {
   let service: UserService;
@@ -9,6 +10,8 @@ describe('UserService', () => {
     find: jest.Mock;
     save: jest.Mock;
     findOneBy: jest.Mock;
+    update: jest.Mock;
+    delete: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -16,6 +19,8 @@ describe('UserService', () => {
       find: jest.fn(),
       save: jest.fn(),
       findOneBy: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -39,9 +44,7 @@ describe('UserService', () => {
       ...user,
       senha: hashedPassword,
     });
-  
-    const result = await service.create(user as User);
-  
+    const result = await service.create(user as User); 
     expect(result.senha).toEqual(hashedPassword);
     expect(mockUserRepository.save).toBeCalledWith({
       ...user,
@@ -68,4 +71,14 @@ describe('UserService', () => {
     expect(result).toEqual({ id: 1, nome: 'Jonh' });
   });
 
+  it('deve atualizar um usuário', async () => {
+    mockUserRepository.update.mockResolvedValue({ affected: 1 });
+    const result = await service.update(1, { nome: 'Novo Nome' });
+    expect(result).toEqual({ affected: 1 });
+  });
+  it('deve deletar um usuário', async () => {
+    mockUserRepository.delete.mockResolvedValue({ affected: 1 });
+    const result = await service.remove(1);
+    expect(result.affected).toBe(1);
+  });
 });
