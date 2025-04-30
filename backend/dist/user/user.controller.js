@@ -15,15 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
-const create_user_dto_1 = require("./dto/create-user.dto");
-const update_user_dto_1 = require("./dto/update-user.dto");
+const user_entity_1 = require("./entities/user.entity");
 let UserController = class UserController {
     userService;
     constructor(userService) {
         this.userService = userService;
     }
-    create(createUserDto) {
-        return this.userService.create(createUserDto);
+    create(user) {
+        return this.userService.create(user);
     }
     findAll() {
         return this.userService.findAll();
@@ -31,8 +30,8 @@ let UserController = class UserController {
     findOne(id) {
         return this.userService.findOne(+id);
     }
-    update(id, updateUserDto) {
-        return this.userService.update(+id, updateUserDto);
+    update(id, user) {
+        return this.userService.update(+id, user);
     }
     remove(id) {
         return this.userService.remove(+id);
@@ -43,7 +42,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [user_entity_1.User]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "create", null);
 __decorate([
@@ -60,11 +59,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "update", null);
 __decorate([
