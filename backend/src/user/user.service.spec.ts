@@ -5,12 +5,17 @@ import * as bcrypt from 'bcrypt';
 describe('UserService', () => {
   let service: UserService;
 
-  let mockUserRepository: { find: jest.Mock; save: jest.Mock };
+  let mockUserRepository: {
+    find: jest.Mock;
+    save: jest.Mock;
+    findOneBy: jest.Mock;
+  };
 
   beforeEach(async () => {
     mockUserRepository = {
       find: jest.fn(),
       save: jest.fn(),
+      findOneBy: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -55,6 +60,12 @@ describe('UserService', () => {
     const result = await service.findAll();
     expect(result).toHaveLength(1);
     expect(result[0].nome).toBe('Jonh');
+  });
+
+  it('deve buscar um usuário pelo ID', async () => {
+    mockUserRepository.findOneBy.mockResolvedValue({ id: 1, nome: 'Jonh' });
+    const result = await service.findOne(1);
+    expect(result).toEqual({ id: 1, nome: 'Jonh' });
   });
 
 });
